@@ -319,7 +319,7 @@
 %----- First Page -----
 \newcommand{\thefirstpage}{%
 \thispagestyle{empty}
-	\sffamily
+	%\sffamily
 	%\setcounter{page}{1}
 	\begin{center}
 		\includegraphics[width=8cm]{\schoolLogo}
