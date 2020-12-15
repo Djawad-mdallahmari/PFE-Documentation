@@ -29,15 +29,38 @@ Ce cahier d'analyse s'inscrit dans le cadre du projet Canne connectée pour aveu
 Nous verrons donc dans ce document une analyse sur l'application Android à développer. Nous verrons en particulier quelques méthodes de reconnaissances d'objet pour le mobile, la méthode qui sera mise en place pour faire de la synthèse vocale et également comment garantir à l'utilisateur une interface adaptée à ses contraintes.
 
 \section{Reconnaissance d'objet}
-\subsection{TensorFlow}
 \subsection{Modèles}
-\subsection{Banque d'images}
+L'un des besoins primaire pour la réalisation de ce projet est la reconnaissance d'objet. En effet, toute l’application dépend de la capacité du modèle à détécter et identifier un objet. Afin de répondre à ce besoin, il faudrait faire un inventaire des modèles de reconnaissance d'objet disponible puis faire des comparaisons. Pour mesurer les performances de chaque modèle, des critères doivent être établis ainsi que des conditions de fonctionnement bien défini. Cela permettrait d'avoir un environnement d'exécution commun pour chaque modèle, et donc des mesures cohérentes.
 
-\section{Synthèse vocale}
-\subsection{subsection}
+\subsubsection{Modèles disponibles}
+Avec la librairie TensorFlow, nous disposons d'un grand panel de modèles pré-entrainés (disponibles sur \url{https://tfhub.dev}). Cependant, les modèles déjà converti en modèles adaptés pour TensorFlow Lite restent peu, notamment ceux liés à la reconnaissance d'image et plus particulièrement la reconnaissance d'objets (\textbf{Object Detection}) (disponible sur \url{https://tfhub.dev/s?deployment-format=lite&module-type=image-object-detection}). En effet, il existe que 3 modèles officiels dans cette catégorie : SSD MobileNet, Mobile Object Localizer et East Text Detector. Parmi ces 3, on peut déjà abandonner le East Text Detector puisqu'il s'agit ici de détecter du texte. En revanche, au niveau des modèles de \textbf{classification}, il existe un peu plus de modèles compatibles TensorFlow Lite (\url{https://tfhub.dev/s?deployment-format=lite&module-type=image-classification}).
+
+\subsubsection{Object Detection vs Classification}
+
+
+\subsubsection{Choix du modèle}
+
+benchmark..
+id 1 objet à la X(objet id)
+classification
+banque d'image
+\subsection{Intégration dans une application Android}
+les méthodes d'integration
+fonctionnement
+entrée sortie
+
+\section{Informer l'utilisateur}
+\subsection{Synthèse vocale}
+fonctionnement
+parametrage
+rendre le message compréhensible: viseur,
+vibreur
+encodage-trame (1mots,phrase,1vib,2vib,vib long..?)
+diag de classe
 
 \section{Navigation}
-\subsection{subsection}
+\subsection{Guide d'utilisation}
+\subsection{Accès aux réglages}
 
 \annexes
 
