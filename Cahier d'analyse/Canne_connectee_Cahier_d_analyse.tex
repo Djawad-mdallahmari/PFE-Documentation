@@ -33,7 +33,7 @@ Nous verrons donc dans ce document une analyse sur l'application Android à dév
 L'un des besoins primaire pour la réalisation de ce projet est la reconnaissance d'objet. En effet, toute l’application dépend de la capacité du modèle à détécter et identifier un objet. Afin de répondre à ce besoin, il faudrait faire un inventaire des modèles de reconnaissance d'objet disponible puis faire des comparaisons. Pour mesurer les performances de chaque modèle, des critères doivent être établis ainsi que des conditions de fonctionnement bien défini. Cela permettrait d'avoir un environnement d'exécution commun pour chaque modèle, et donc des mesures cohérentes.
 
 \subsubsection{Modèles disponibles}
-Avec la librairie TensorFlow, nous disposons d'un grand panel de modèles pré-entrainés (disponibles sur \url{https://tfhub.dev}). Cependant, les modèles adaptés pour TensorFlow Lite restent peu, notamment ceux liés à la reconnaissance d'image et plus particulièrement la reconnaissance d'objets (\textbf{Object Detection}) (disponible sur \url{https://tfhub.dev/s?deployment-format=lite&module-type=image-object-detection}). En effet, il existe que 3 modèles officiels dans cette catégorie : SSD MobileNet, Mobile Object Localizer et East Text Detector. Parmi ces 3, on peut déjà abandonner le East Text Detector puisqu'il s'agit ici de détecter du texte. En revanche, au niveau des modèles de \textbf{Classification}, il existe un peu plus de modèles compatibles TensorFlow Lite (\url{https://tfhub.dev/s?deployment-format=lite&module-type=image-classification}).
+Avec la librairie TensorFlow, nous disposons d'un grand panel de modèles pré-entrainés \footnote{\url{https://tfhub.dev}}. Cependant, les modèles adaptés pour TensorFlow Lite restent peu, notamment ceux liés à la reconnaissance d'image et plus particulièrement la reconnaissance d'objets (\textbf{Object Detection}) \footnote{\url{https://tfhub.dev/s?deployment-format=lite&module-type=image-object-detection}}. En effet, il existe que 3 modèles officiels dans cette catégorie : SSD MobileNet, Mobile Object Localizer et East Text Detector. Parmi ces 3, on peut déjà abandonner le East Text Detector puisqu'il s'agit ici de détecter du texte. En revanche, au niveau des modèles de \textbf{Classification}, il existe un peu plus de modèles compatibles TensorFlow Lite \footnote{\url{https://tfhub.dev/s?deployment-format=lite&module-type=image-classification}}.
 
 \newpage
 
@@ -75,11 +75,11 @@ En revanche, les modèles de classification avec TensorFlow ne détecte qu'un se
 
 \subsubsection{Choix du modèle}
 
+classification
+banque d'image
 Dans notre cas 
 benchmark..
 id 1 objet à la X(objet id)
-classification
-banque d'image
 \subsection{Intégration dans une application Android}
 les méthodes d'integration
 fonctionnement
