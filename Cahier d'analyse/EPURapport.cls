@@ -55,7 +55,7 @@
 \ifthenelse{\boolean{BUTF8}}{\RequirePackage[utf8]{inputenc}}{}
 
 %----- Initial Class -----
-\LoadClass[11pt,a4paper]{report}
+\LoadClass[12pt,a4paper]{report}
 \RequirePackage[french]{babel}
 \RequirePackage{url}
 \RequirePackage{xcolor}

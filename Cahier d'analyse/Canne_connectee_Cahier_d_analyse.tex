@@ -38,7 +38,7 @@ Un modèle est un fichier qui a été entrainé pour reconnaître certains types
 Le choix du bon modèle est un facteur important pour répondre au besoin de reconnaissance d'objet. En effet, toute l’application, pour qu'elle soit utile aux utilisateurs finals, dépend de la capacité du modèle à détecter et identifier un objet. Afin de répondre à ce besoin, il faudrait faire un inventaire des modèles de reconnaissance d'objet disponible puis faire des comparaisons. Pour mesurer les performances de chaque modèle, des critères doivent être établis (Latence, Disponibilité, Rapidité, Coût, ...) ainsi que des conditions de fonctionnement bien définis (caractéristique du smartphone, version d'android, version, ...). Cela permettrait d'avoir un environnement d'exécution commun pour chaque modèle et donc des mesures cohérentes.
 
 \subsubsection{Modèles disponibles}
-Avec la librairie TensorFlow, nous disposons d'un grand panel de modèles préentrainés. La plupart de ces modèles ne sont pas directement compatible avec TensorFlow Lite. Ceux sur TF2 Detection zoo \footnote{\url{https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/tf2_detection_zoo.md}} peuvent être converti en utilisant TFLite Converter \footnote{\url{https://www.tensorflow.org/lite/convert}}. Les modèles déjà adaptés TensorFlow Lite sont disponible sur le hub officiel de TensorFlow \footnote{\url{https://tfhub.dev}} mais peu de modèles de reconnaissance d'image y sont rescencés notamment de reconnaissance d'objets (\textbf{Object Detection}) \footnote{\url{https://tfhub.dev/s?deployment-format=lite&module-type=image-object-detection}}. En effet, il existe que trois modèles officiels dans cette catégorie : SSD MobileNet, Mobile Object Localizer et East Text Detector. Parmi ces trois modèles, on peut déjà abandonner le East Text Detector puisqu'il s'agit ici de détecter du texte. En revanche, d'autres modèles de reconnaissance d'objet sont disponibles sur le github de TensorFlow \footnote{\url{https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/tf1_detection_zoo.md}} et sont à priori déjà compatible mobile. Ces modèles là sont intéressants car ils n'ont pas tous été entraînés avec la même banque d'images, on pourra donc choisir celui qui répond le plus à notre besoin (voir partie \ref{choixmodele}). Au niveau des modèles de \textbf{Classification}, il existe un peu plus de modèles compatibles TensorFlow Lite \footnote{\url{https://tfhub.dev/s?deployment-format=lite&module-type=image-classification}}. Les modèles de classification, malgré le faite qu'ils sont plus précis, vont moins répondre à notre besoin initial, mais méritent d'être évoqués puisque ceux-ci pourraît être mis en place dans une version futur du projet en complément du modèle de reconnaissance d'objet choisi.
+Avec la librairie TensorFlow, nous disposons d'un grand panel de modèles préentrainés. La plupart de ces modèles ne sont pas directement compatible avec TensorFlow Lite. Ceux sur TF2 Detection zoo \footnote{\url{https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/tf2_detection_zoo.md}} peuvent être converti en utilisant TFLite Converter \footnote{\url{https://www.tensorflow.org/lite/convert}}. Les modèles déjà adaptés TensorFlow Lite sont disponible sur le hub officiel de TensorFlow \footnote{\url{https://tfhub.dev}} mais peu de modèles de reconnaissance d'image y sont rescencés notamment de reconnaissance d'objets (\textbf{Object Detection}) \footnote{\url{https://tfhub.dev/s?deployment-format=lite&module-type=image-object-detection}}. En effet, il existe que trois modèles officiels dans cette catégorie : SSD MobileNet, Mobile Object Localizer et East Text Detector. Parmi ces trois modèles, on peut déjà abandonner le East Text Detector puisqu'il s'agit ici de détecter du texte. En revanche, d'autres modèles de reconnaissance d'objet sont disponibles sur le github de TensorFlow \footnote{\url{https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/tf1_detection_zoo.md}} et sont à priori déjà compatible mobile. Ces modèles là sont intéressants car ils n'ont pas tous été entraînés avec la même banque d'images, on pourra donc choisir celui qui répond le plus à notre besoin (voir partie Choix du modèle \ref{choixmodele}). Au niveau des modèles de \textbf{Classification}, il existe un peu plus de modèles compatibles TensorFlow Lite \footnote{\url{https://tfhub.dev/s?deployment-format=lite&module-type=image-classification}}. Les modèles de classification, malgré le faite qu'ils sont plus précis, vont moins répondre à notre besoin initial, mais méritent d'être évoqués puisque ceux-ci pourraît être mis en place dans une version futur du projet ; en complément du modèle de reconnaissance d'objet choisi par exemple.
 
 \subsubsection{Object Detection vs Classification}
 Les modèles de reconnaissances d'objet (Objet Detection) sont capables de localiser et identifier plusieurs objets sur une même image.
@@ -50,9 +50,8 @@ Les modèles de reconnaissances d'objet (Objet Detection) sont capables de local
   \label{fig:objectdetection}
 \end{figure}
 
- Ce type de modèle est entraîné avec des objets de différentes classes (vêtements, fruits, etc.). Avec TensorFlow lorsqu'on met à l'éntrée de ce type de modèle une image, on obtient en sortie une liste d'objets avec chacun sa localisation, sa classe et un degré de confidence (qui correspond à la fiabilité de l'objet identifié).
+ Ce type de modèle est entraîné avec des objets de différentes classes (vêtements, fruits, etc.). Avec TensorFlow, lorsqu'on met à l'éntrée de ce type de modèle une image, on obtient en sortie une liste d'objets avec chacun sa localisation, sa classe et un degré de confidence (qui correspond à la fiabilité de l'objet identifié).
 
-\newpage
 \begin{figure}[h!]
 \centering
   \includegraphics[width=0.6\textwidth]{images/schema_objectDetection.png}
@@ -78,13 +77,55 @@ En revanche, les modèles de \textbf{classification} avec TensorFlow ne détecte
 \end{figure}
 
 \subsubsection{Choix du modèle} \label{choixmodele}
-Notre objectif pour notre premier prototype est d'utiliser un modèle qui reconnait un maximum d'objet dans différentes classes. Cela permettrait donc aux utilisateurs finaux de faire détecter un ensemble d'objet de différentes catégories plutôt que d'un catégorie spécifique. De ce point de vue, les modèles de classification tels qu'on les as vu précédemment ne correspondraient donc pas à ce besoin. Néanmoins, pour des versions ultérieurs de l'application, il pourra être envisager, soit une amélioration du modèle utilisé pour que celui-ci soit plus précis, ou ajouter la possibilité de changer de modèle. Il nous faut donc choisir parmi les deux modèles disponibles évoqués précedemment à savoir SSD MobileNet et Mobile Object Localizer.
+Notre objectif pour notre premier prototype est d'utiliser un modèle qui reconnait un maximum d'objet dans différentes classes. Cela permettrait donc aux utilisateurs finaux détecter un ensemble d'objet de différentes catégories plutôt que d'une seule catégorie spécifique. De ce point de vue, les modèles de classification tels qu'on les as vu précédemment ne correspondraient donc pas à ce besoin. Néanmoins, pour des versions ultérieurs de l'application, il pourra être envisager, soit une amélioration du modèle utilisé pour que celui-ci soit plus précis, ou ajouter la possibilité de changer de modèle au sein de l'application. Il nous faut donc choisir parmi les deux modèles disponibles évoqués précedemment à savoir SSD MobileNet et Mobile Object Localizer. On pourra par la suite comparer le modèle choisi parmi ces deux là avec les autres modèles entraînés à l'aide d'autres banque d'images \footnote{\url{https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/tf1_detection_zoo.md}}. \\
+
+Ces deux modèles permettent donc d'identifier des objets, parmi les objets connu du modèle, et d'en fournir leurs positions dans l'image. Tout deux utilisent l'architecture de réseau de neuronne MobileNet \footnote{\url{https://arxiv.org/abs/1801.04381}}. SSD MobileNet a été entraîné avec la banque d'image COCO dataset \footnote{\url{https://cocodataset.org/}}. Cependant une autre version disponible uniquement sur PC a été entraîné avec Open Images V4 \footnote{\url{https://storage.googleapis.com/openimages/web/index.html}}. En revanche aucune information sur la banque d'image utiliée pour Mobile Object Localizer.
+Pour faire notre choix de modèle, il est intéressant de comparer ses deux modèles en faisant un benchmark. En effet TensorFlow dispose d'un outil qui permet de mesurer et faire des calculs de statistiques sur les modèles. L'outil permet de mesurer le temps d'initialisation du modèle, le temps de traitement (inference time), et bien d'autres données. Dans notre cas le critère intéressant à mesurer serait la latence du modèle. Les résltats des benchmarks varient beaucoup en fonction du smartphone utilisé. Ci-dessous les résultats de benchmarks qui ont été fait par TensorFlow sur différents appareils.
+
+\begin{figure}[h!]
+\centering
+  \includegraphics[width=\textwidth]{images/bench_mol.png}
+  \caption{Benchmark de Mobile Object Localizer sur plusieurs appareils}
+  \label{fig:benchmol}
+\end{figure}
+
+(Remarque: Ici aucune indication sur le nombre de threads utilisés)
+
+\begin{figure}[h!]
+\centering
+  \includegraphics[width=\textwidth]{images/bench_ssd_mobilenet.jpg}
+  \caption{Benchmark de SSD MobileNet sur plusieurs appareils}
+  \label{fig:benchssdmobilenet}
+\end{figure}
+
+Travaillant sur le Samsung Galaxy S10e dans le cadre de ce projet, il est intéressant de mesurer les performance de ces deux modèles sur ce smartphone également. Ci-dessous les résultats obtenus :
+
+\begin{figure}[h!]
+\centering
+  \includegraphics[width=\textwidth]{images/bench_s10e.png}
+  \caption{Benchmark sur Samsung Galaxy S10e}
+  \label{fig:benchs10e}
+\end{figure}
+
+Pour conclure sur ces mesures, on peut voir donc clairement que le modèle SSD MobileNet présente plus de latence que Mobile Object Localizer. Il serait donc plus judicieux de choisir ce modèle là. Cependant pour utiliser ces modèles, nous avons besoin d'un fichier important parmi les métadata du modèle qui est le fichier label. Ce fichier stoque les labels de tous les classes d'objets connu par le modèle. En l'abscence de ce fichier qui doit accompagner le modèle, il est donc impossible d'attribuer un label à un objet détecté. Or, le fichier accompagnant le Mobile Object Localizer est vide et aucun moyen de le retrouver ou d'extraire ces données.  On peut d'ailleurs voir directement le résultat de l'absence de données dans ce fichier sur le site \footnote{\url{https://tfhub.dev/google/lite-model/object_detection/mobile_object_localizer_v1/1/default/1}} :
+
+\begin{figure}[h!]
+\centering
+  \includegraphics[width=\textwidth]{images/labels_empty.JPG}
+  \caption{Labelmap vide}
+  \label{fig:labelsempty}
+\end{figure}
+
+Les objets sont détectés et localisé mais aucun label leur est assigné. Souhaitant informé l'utilisateur de l'objet détectés, nous retenons plutôt le modèle SSD MobileNet.
 
 Mobile Object Localizer
+quoi ? localiser ? éliminié!
 
 SSD MobileNet
+quoi, banque d'image, graph?...
 Different mobileNet qui existe (changement minim): %https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/tf1_detection_zoo.md#mobile-models
 
+Zoo Modeles Comparaison
 
 
 notre besoin (max d'objet,existant,reliable..)
