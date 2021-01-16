@@ -38,7 +38,7 @@ Un modèle est un fichier qui a été entrainé pour reconnaître certains types
 Le choix du bon modèle est un facteur important pour répondre au besoin de reconnaissance d'objet. En effet, toute l’application, pour qu'elle soit utile aux utilisateurs finals, dépend de la capacité du modèle à détecter et identifier un objet. Afin de répondre à ce besoin, il faudrait faire un inventaire des modèles de reconnaissance d'objet disponible puis faire des comparaisons. Pour mesurer les performances de chaque modèle, des critères doivent être établis (Latence, Disponibilité, Rapidité, Coût, ...) ainsi que des conditions de fonctionnement bien définis (caractéristique du smartphone, version d'android, version, ...). Cela permettrait d'avoir un environnement d'exécution commun pour chaque modèle et donc des mesures cohérentes.
 
 \subsubsection{Modèles disponibles}
-Avec la librairie TensorFlow, nous disposons d'un grand panel de modèles préentrainés. La plupart de ces modèles ne sont pas directement compatible avec TensorFlow Lite. Ceux sur TF2 Detection zoo \footnote{\url{https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/tf2_detection_zoo.md}} peuvent être converti en utilisant TFLite Converter \footnote{\url{https://www.tensorflow.org/lite/convert}}. Les modèles déjà adaptés TensorFlow Lite sont disponible sur le hub officiel de TensorFlow \footnote{\url{https://tfhub.dev}} mais peu de modèles de reconnaissance d'image y sont rescencés notamment de reconnaissance d'objets (\textbf{Object Detection}) \footnote{\url{https://tfhub.dev/s?deployment-format=lite&module-type=image-object-detection}}. En effet, il existe que trois modèles officiels dans cette catégorie : SSD MobileNet, Mobile Object Localizer et East Text Detector. Parmi ces trois modèles, on peut déjà abandonner le East Text Detector puisqu'il s'agit ici de détecter du texte. En revanche, d'autres modèles de reconnaissance d'objet sont disponibles sur le github de TensorFlow \footnote{\url{https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/tf1_detection_zoo.md}} et sont à priori déjà compatible mobile. Ces modèles là sont intéressants car ils n'ont pas tous été entraînés avec la même banque d'images, on pourra donc choisir celui qui répond le plus à notre besoin (voir partie Choix du modèle \ref{choixmodele}). Au niveau des modèles de \textbf{Classification}, il existe un peu plus de modèles compatibles TensorFlow Lite \footnote{\url{https://tfhub.dev/s?deployment-format=lite&module-type=image-classification}}. Les modèles de classification, malgré le faite qu'ils sont plus précis, vont moins répondre à notre besoin initial, mais méritent d'être évoqués puisque ceux-ci pourraît être mis en place dans une version futur du projet ; en complément du modèle de reconnaissance d'objet choisi par exemple.
+Avec la librairie TensorFlow, nous disposons d'un grand panel de modèles préentrainés. La plupart de ces modèles ne sont pas directement compatible avec TensorFlow Lite. Ceux sur TF2 Detection zoo \footnote{\url{https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/tf2_detection_zoo.md}} peuvent être converti en utilisant TFLite Converter \footnote{\url{https://www.tensorflow.org/lite/convert}}. Les modèles déjà adaptés TensorFlow Lite sont disponible sur le hub officiel de TensorFlow mais peu de modèles de reconnaissance d'image y sont rescencés notamment de reconnaissance d'objets (\textbf{Object Detection}) \footnote{\url{https://tfhub.dev/s?deployment-format=lite&module-type=image-object-detection}}. En effet, il existe que trois modèles officiels dans cette catégorie : SSD MobileNet, Mobile Object Localizer et East Text Detector. Parmi ces trois modèles, on peut déjà abandonner le East Text Detector puisqu'il s'agit ici de détecter du texte. En revanche, d'autres modèles de reconnaissance d'objet sont disponibles sur le github de TensorFlow \footnote{\url{https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/tf1_detection_zoo.md}} mais devront également être converti en mobile pour pouvoir être utilisés sur Android. Ces modèles là sont intéressants car ils n'ont pas tous la même architecture de réseau de neuronnes (CenterNet, EfficientNet, Faster R-CNN, ...) , on pourra donc choisir celui qui répond le plus à notre besoin (voir partie \ref{choixmodele} Choix du modèle). Au niveau des modèles de \textbf{Classification}, il existe un peu plus de modèles compatibles TensorFlow Lite \footnote{\url{https://tfhub.dev/s?deployment-format=lite&module-type=image-classification}}. Les modèles de classification, malgré le faite qu'ils sont plus précis, vont moins répondre à notre besoin initial, mais méritent d'être évoqués puisque ceux-ci pourraît être mis en place dans une version futur du projet ; en complément du modèle de reconnaissance d'objet choisi par exemple.
 
 \subsubsection{Object Detection vs Classification}
 Les modèles de reconnaissances d'objet (Objet Detection) sont capables de localiser et identifier plusieurs objets sur une même image.
@@ -112,43 +112,81 @@ Pour conclure sur ces mesures, on peut voir donc clairement que le modèle SSD M
 \begin{figure}[h!]
 \centering
   \includegraphics[width=\textwidth]{images/labels_empty.JPG}
-  \caption{Labelmap vide}
+  \caption{Résultat d'un labelmap vide}
   \label{fig:labelsempty}
 \end{figure}
 
-Les objets sont détectés et localisé mais aucun label leur est assigné. Souhaitant informé l'utilisateur de l'objet détectés, nous retenons plutôt le modèle SSD MobileNet.
-
-Mobile Object Localizer
-quoi ? localiser ? éliminié!
-
-SSD MobileNet
-quoi, banque d'image, graph?...
-Different mobileNet qui existe (changement minim): %https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/tf1_detection_zoo.md#mobile-models
-
-Zoo Modeles Comparaison
-
-
-notre besoin (max d'objet,existant,reliable..)
-benchmark..
-banque d'image
-classification
-Dans notre cas 
-ident 1 objet à la X(objet id)
-\subsection{Intégration dans une application Android}
+Les objets sont détectés et localisés mais aucun label leur est assigné. Souhaitant informer l'utilisateur de l'objet détecté, nous retenons plutôt le modèle SSD MobileNet.
+\subsection{Implémentation dans Android}
 les méthodes d'integration
 fonctionnement
 entrée sortie
 
 \section{Informer l'utilisateur}
-\subsection{Synthèse vocale}
-fonctionnement
-parametrage
-rendre le message compréhensible: viseur,
-vibreur
-encodage-trame (1mots,phrase,1vib,2vib,vib long..?)
-diag de classe
+Le deuxième aspect important de ce projet est l'intéraction avec l'utilisateur. Les utilisateurs finaux étant des aveugles, le programme ne pourra pas se contenter d'afficher du texte à l'écran, ou de marquer les zones où les objets ont été détectés. Il faut donc trouver un moyen pour informer l'utilisateur des données renvoyés par le système. Pour répondre à ce besoin il est intéressant de faire un état de l'art et voir ce qui se fait sur ce genre d'application.
 
-\subsection{Vibration}
+\subsection{Solutions existantes}
+Il est important de noter que les aveugles utilisent les smartphones comme les notres mais parfois en complément d'outils externe (physique) ou interne (logiciel). Parmi les outils physique il y a la solution proposée par la start-up française Telorion. Cette solution met en place une coque amovible en élastomère avec des perforations qui permet aux aveugles de naviguer sur les différents menus.
+
+\begin{figure}[h!]
+\centering
+  \includegraphics[width=\textwidth]{images/telorion_case.JPG}
+  \caption{Coque amovible Telorion}
+  \label{fig:telorioncase}
+\end{figure}
+
+Cette solution est accompagnée d'une couche logiciel avec le Telorion Vox et le Telerion Zoom qui permettent d'avoir un retour sonore ou faire des zoom par exemple pour les malvoyants. \\
+
+Une autre solution physique est d'utiliser un clavier en braille externe connecté au téléphone. Cette solution est notamment utilisée pour faire de la saisie de texte, comme répondre à un SMS ou envoyer un mail par exemple. La saisie de texte peut aussi se faire par dictée vocale. 
+
+Aujourd'hui la plupart des personnes aveugles utilisent plutôt des solutions exclusivement logiciel. Ces solutions se base sur un retour sonore qui peuvent aller du simple "bip" (lors d'une gestuelle précise sur l'écran par exemple) au lecteur d'écran (comme VoiceOver sur Apple et TalkBack sur Android) ou encore des assistants vocaux comme Siri et Google Now. Ces solutions sont intéressantes car rapide et permettent aux utilisateurs d'avoir moins de manipulations complexes.
+
+\subsection{Synthèse vocale}
+Un état des lieux des applications existantes sur le play store d'Android nous a permi de voir que beaucoup d'application pour ce type d'usage utilisent la synthèse vocale. On peux par exemple trouver des lecteurs de texte, des applications qui permettent d'identifier de la monnaie etc. Avec la synthèse vocale, les utilisateurs ont donc un retour sonore sur le billet d'argent souhaité ou le document scanné.
+
+Le fonctionnement au final est simple, il suffit de donner au Text-To-Speech (différent de Speech-to-Text qui est la reconnaissance vocale) le texte à lire. Il sera ensuite énoncé par la voix synthétique de l'appareil. Plusieurs paramètres peuvent être ajustés comme la voix de la synthèse vocale, la langue, ou encore la rapidité.
+
+Pour implémenter cette solution sur Android, on peut utiliser la classe portant le même nom: TextToSpeech. Après initilialisation de l'objet, il nous suffit ensuite de lui donner le texte à lire ; dans notre cas l'objet identifié. \\
+
+\begin{lstlisting}[language=Java]
+TextToSpeech tts;
+
+tts = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
+        @Override
+        public void onInit(int status) {
+    		// Do something
+        }
+      });
+      tts.setLanguage(Locale.US);
+
+/**
+*  Detection processing ...
+*/
+
+tts.speak(result.getTitle(), TextToSpeech.QUEUE_FLUSH, null, null);
+\end{lstlisting}
+
+\subsection{Rendre le message compréhensible}
+L'application détecte les objets en temps réel et affiche les labels et les positions correspondantes de manière instantané. Chaque frame du flux vidéo est donc soumis au traitement et donc les valeurs en sorties sont instantanément mis à jour également. Le retour sonore qui doit énoncer les objets identifiés, il se répete donc plusieurs fois de manière non stop. Autre problème également est le nombre d'objet sur une image. Comment indiquer à l'utilisateur chaque objet détecté en évitant cette problématique de répétition? Il faut donc trouver un moyen de rendre cela plus compréhensible par l'utilisateur et moins agaçant. Plusieurs solutions peuvent être mise en place pour tenter de palier à ces problèmes. Ci-dessous l'analyse de quelques-unes d'entre elles. 
+
+\subsubsection{Meilleur gestion de la synthèse vocale}
+La première solution est de jouer sur le moment où l'objet est énoncé. On peut mettre en place des conditions qui vont faire qu'on va énoncer l'objet uniquement si ces conditions sont respectées. On peux mettre par exemple une condition sur le temps entre deux énoncés. Attendre un certain délai avant de reprononcer le nom de l'objet. Cependant avec cette condition, l'utilisateur peut avoir une sensation de latence. On peux mettre une autre condition sur l'objet. Si l'objet prononcé précédemment est le même, alors on ne le prononce pas en boucle. L'inconvénient de cette deuxième condition est que l'objet ne va être énoncé qu'une fois (sauf changement) et donc l'utilisateur peut ne pas avoir entendu correctement. Il devra pointer sur un autre objet puis revenir sur l'objet précédent pour entendre à nouveau. 
+\subsubsection{Capteurs}
+Une autre solution serait d'utiliser les différents capteurs du smartphone (accéléromètre + gyroscope) afin de détecter un déplacement dans l'espace. On pourrait alors estimer que si le smartphone est immobile, alors le synthétiseur ne reprononce pas l'objet en cours. Le problème de cette solution est que malgré que le smartphone reste immobile, le flux vidéo de la caméra peut changer et d'autres objets peuvent apparaître. Ils ne seront donc pas énoncé tant que le smartphone n'aura pas bougé.
+\subsubsection{Viseur}
+Pour palier au problème des objets mutltiples sur une image, on pourrait imaginer un système de viseur centrale qui va permettre d'isoler l'objet au centre de l'image. Ce sera donc uniquement cette objet là qui sera énoncé.
+
+%image ici
+
+Ensuite pour les autres objets on peut mettre en place d'autres solutions pour indiquer à l'utilisateur qu'il y a plusieurs objets sur l'image (par vibrement ou phrases pré-enregistrés).
+
+\subsubsection{Vibreur}
+Entré dans le viseur, nombre d'objets, 
+\subsubsection{Phrases pré-enregistrés}
+(zone, point),
+vibreur
+encodage-trame (1mots,phrase,1vib,2vib,vib long..?)haut bas à gauche
+pb plusieurs objets ?
 
 \section{Navigation}
 \subsection{Guide d'utilisation}
