@@ -36,15 +36,41 @@ Nous verrons donc dans ce document les problèmes posés, les enjeux associés e
 
 \section{Contexte}
 
+Ce projet a été initié afin d'étudier les possibilités offertes par un smartphone pour pourvoir aider les malvoyants dans leur quotidien. En effet, il existe aujourd'hui plusieurs modèles de cannes connectées qui permettent d'aider les malvoyants à se déplacer. Ces cannes se basent sur différentes technologies (GPS, capteurs de mouvement, etc.) afin de renvoyer des informations utiles aux utilisateurs tels que la détection de chute ou encore la géolocalisation de l'individu.\\
+
+Ce projet vise donc à enrichir ces informations transmis à l'utilisateur pour lui permettre de mieux percevoir leurs environnements. Pour cela, on souhaite donc explorer le potentiel des smartphones, ainsi que de l'intelligence artificielle (IA) afin de recueillir le maximum d'information sur un environnement donnée. Cela nous permettra de voir également les limites de l'intelligence artificielle employée dans ce cadre là.
+
 \section{Objectifs}
 
-\chapter{Stratégie d'approche}
+L'objectif de ce PFE est de faire de la reconnaissance d'image à l'aide du smartphone. Plus précisément, faire de la reconnaissance d'objet en réalisant une application Android. Cette application devra permettre de reconnaître les objets du quotidien (bouteille, assiette, mug, etc.) ou d'autres objets sur un environnement plus large (poteau, trottoir, arbre, etc.).\\
 
-\section{Communication}
+L’application devra ensuite informer l’utilisateur de l’objet identifié. Cette information devra être indiquée à l’utilisateur d’une manière particulière, car l’application est destinée à des personnes malvoyantes. Pour cela, une étude des habitudes d'utilisation des personnes aveugles de leur smartphone sera nécessaire afin de déterminer le meilleur moyen de renvoyer ce type d'information.\\
 
-\section{Fournir des solutions adaptées}
+Le périmètre de ce projet sera donc autour de cet objectif principal qui est donc de fournir un prototype d'une application Android renvoyant des informations utiles sur la scène qui entoure l'utilisateur. Par la suite, une extension du périmètre initial du projet pourra être envisagée afin d'intégrer ce système sur une canne pour aveugles. Cette intégration pourra se faire par l'ajout du smartphone directement sur la canne ou par la réalisation d'un boîtier avec des capteurs communiquant avec le smartphone.\\
 
-\section{Faciliter la reprise du projet}
+Sur ce point, M.VENTURINI avait travaillé avec d'autres étudiants sur la faisabilité de ce projet sur un microcontrôleur et travail également avec des étudiants du département informatique (DI) sur l'enrichissement d'un réseau de neurones afin de pouvoir enregistrer et reconnaître des objets donnés.\\
+
+Notre application sera donc un premier prototype qui nous permettra d'avoir un premier outil qu'on pourra présenter aux personnes malvoyantes afin d'avoir un retour précis sur leurs besoins. L’Institut d’éducation sensorielle pour sourds et aveugles IRECOV de Tours peut nous permettre d'entrer en contact avec des personnes aveugles afin de réaliser des tests.\\
+
+\chapter{Motivation et stratégie d'approche}
+
+\section{Motivations}
+
+J'ai été particulièrement intéressé par ce projet, car c'était une occasion pour moi de découvrir le domaine de l'intelligence artificielle et des réseaux de neurones. En effet, durant mes années d'études, je n'ai pas eu l'occasion de suivre des cours là-dessus ni de travailler sur des projets mettant en œuvre ce type de technique. Ceci, malgré qu'on en entend de plus en plus dans différents domaines d'application. Il me semblait donc intéressant de saisir cette occasion afin de m'initier et comprendre quelques mécanismes sur son fonctionnement.\\
+
+J'ai aussi été attiré par le fait que ce travail pourrait servir concrètement à des personnes réelles et n'est donc pas qu'un simple projet académique permettant de mettre en œuvre les acquis. Un réel besoin existe auprès des utilisateurs finaux, ce qui motive fortement à être engagé afin de faire aboutir ce projet.\\
+
+Un autre point est que, malgré le fait que je n'ai pas eu l'occasion de suivre des cours sur de l'intelligence artificielle ou le fonctionnement des réseaux de neurones, j'ai déjà de l'expérience dans la réalisation d'application Android. En effet, j'ai pu réaliser une application Android durant mon stage de DUT, et ça m'a permis non seulement de renforcer mes compétences en Java, mais aussi de découvrir le monde du développement mobile. L'aspect technique de ce projet n'est donc pas un frein pour moi, mais plutôt elle me permettra de me baser sur mes acquis afin d'appréhender l'intelligence artificielle sereinement.\\
+
+Ce projet est donc un challenge qui me permettra de consolider mes acquis et d'élargir mes compétences et connaissances sur d'autres facettes de l'informatique.
+
+\section{Stratégie d'approche}
+
+Les enjeux du projet de fin d'études n'étant pas tournés autour de la technique, j'ai préféré me concentrer sur d'autres points tout aussi important dans ce type de projet. En effet, pour qu'un projet soit réussi, il faut être capable de prendre du recul et gérer les autres aspects autour de la technique telle que \textbf{la gestion du projet} au sens organisationnel, \textbf{anticiper les risques} et \textbf{respecter les délais et le budget}. Une de mes stratégies fut donc la mise en place de planning afin d'organiser chaque phase du projet du début à la fin.\\
+
+Il faut également \textbf{être à l'écoute du client}. C'est pourquoi mettre en place une bonne \textbf{communication avec le client} est essentiel, car cela permettra de bien comprendre le besoin et donc d'être capable de fournir des solutions adéquates. Cette communication régulière permet également de faire un point sur l'avancement du projet et de valider les fonctionnalités implémentées. C'est donc une des stratégies que j'ai pu mettre en place avec le client de manière hebdomadaire par appel ou par mail.\\
+
+Un point important est aussi le fait de fournir un travail qui pourra être repris facilement à la fin du projet. L'importance apportée aux livrables sur le projet de cette année permet donc de fournir des documents qui réunissent tous les éléments nécessaires à \textbf{la reprise du projet}. Ce rapport sera donc accompagné du cahier de spécification, le cahier d'analyse, le manuel développeur, le manuel mainteneur, le manuel administrateur ainsi que le manuel utilisateur. Ces documents faciliteront donc la reprise du projet. J'ai également commenté les parties les plus importantes du code source du projet, mais aussi essayer de respecter les normes de codage et les bonnes pratiques. Tout ceci sur mon github \footnote{ Code source: \url{https://github.com/Djawad-mdallahmari/PFE-ObjectDetection} \\ Documentation: \url{https://github.com/Djawad-mdallahmari/PFE-Documentation}} avec l'historique depuis le début du projet afin de pouvoir revenir sur d'anciennes versions si besoin.
 
 \chapter{Gestion du projet}
 
