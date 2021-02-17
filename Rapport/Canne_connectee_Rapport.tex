@@ -146,17 +146,200 @@ TensorFlow Lite est une librairie qui permet d'utiliser des modèles de réseau 
 
 Pour utiliser ce modèle, je ne suis pas parti d'une application Android que j'ai créée à partir de zéro. Je préférais me baser directement sur l'exemple fourni par Tensorflow sur leur github \footnote{\url{https://github.com/tensorflow}}. Cela me permet de gagner beaucoup de temps et d'avoir une base solide pour implémenter les autres fonctionnalités. L'exemple vient avec deux méthodes d'intégration du modèle qu'on peut choisir au moment de builder l'application : TensorFlow Lite Task Library \footnote{\url{https://www.tensorflow.org/lite/inference_with_metadata/task_library/object_detector}} et TensorFlow Lite Interpreter API \footnote{\url{https://www.tensorflow.org/lite/guide/inference}}. Ces deux librairies permettent d'intégrer à l'application Android le modèle, mais surtout de l'interpréter. Une fois que ces librairies auront été ajoutées grâce aux gestionnaires de dépendance Gradle, Android Studio nous permet de choisir un des deux à utiliser pour builder l'application.\\
 
-Ensuite, pour reconnaître des objets sur une image, il suffit (après toutes les étapes d'initialisations) d'appeler la méthode \verb|recognizeImage(Bitmap bitmap)| qui nous renvoie un ensemble de résultats. Ces résultats sont retournés au sein d'un objet contenant un id, un titre, un taux de confiance et la localisation de l'objet.
+Ensuite, pour reconnaître des objets sur une image, il suffit (après toutes les étapes d'initialisations) d'appeler la méthode \verb|recognizeImage(Bitmap bitmap)| qui nous renvoie un ensemble de résultats. Ces résultats sont retournés au sein d'un objet contenant un id, un titre, un taux de confiance et la localisation de l'objet.\\
+
+\begin{lstlisting}[language=Java]
+ runInBackground( // Lancement en arriere plan
+        new Runnable() {
+          @Override
+          public void run() {
+            final List<Detector.Recognition> results = detector.recognizeImage(croppedBitmap); // Traitement
+
+        	for (final Detector.Recognition result : results) {
+              // Traitement des resultats
+            }
+
+        	// ...
+\end{lstlisting}
 
 \section{Synthétiseur vocal}
 
+Afin de répondre au \textbf{besoin d'informer l'utilisateur} des objets qui ont été détectés, j'ai décidé d'implémenter un synthétiseur vocal qui se chargera de lire le nom des objets. En effet, j'ai vu que cette technique était celle la plus utilisée par les personnes malvoyantes lorsqu'ils utilisent leur smartphone. Pour implémenter cela sur Android, il suffit d'utiliser la classe \verb|TextToSpeech|. Cette classe nous permet d'obtenir une instance avec laquelle on peut faire plusieurs opérations telles que la lecture de texte avec différents paramètres (voix, débit, pile, etc.). En faisant ce choix, je garantis donc à l'utilisateur un outil auquel il a déjà l'habitute d'utiliser. \\
+
+Dans mon programme, je suis obligé d'initialiser la langue du synthétiseur vocal en anglais, car le modèle a été entraîné avec des labels d'objet en anglais. En initilisant donc mon synthétiseur, je garantis que l'utilisateur aura un synthétiseur avec un accent anglais quel que soit la langue par défaut sur son smartphone. \\
+
+\begin{lstlisting}[language=Java]
+TextToSpeech tts;
+
+tts = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
+        @Override
+        public void onInit(int status) {
+      		tts.setLanguage(Locale.US);
+        }
+      });
+
+/**
+*  Detection processing ...
+*/
+
+tts.speak(result.getTitle(), TextToSpeech.QUEUE_FLUSH, null, null);
+\end{lstlisting}
+
+Un des problèmes que j'ai rencontré à ce niveau est la répétition excessive du synthétiseur des objets qui sont détectés. Ceci est dû au fait que chaque image (frame) renvoyé par la caméra est traité en continue et renvoie donc après chaque traitement un ensemble de résultat qui peut être la même que le frame précédent. Il a donc fallu trouver une solution pour éviter cette répétition ou du moins la réduire et rendre le système moins agaçant.\\
+
+Une des solutions simples que j'ai mis en place fut l'ajout d'une simple condition afin de vérifier si l'objet à citer n'est pas la même que l'objet précédent :\\
+
+\begin{lstlisting}[language=Java]
+if(!tts.isSpeaking() && !readedText.equals(result.getTitle())){
+  tts.speak(result.getTitle(), TextToSpeech.QUEUE_FLUSH, null, null);
+  readedText = result.getTitle();
+}
+\end{lstlisting}
+
+Cet ajout m'a permis de limiter ce problème, mais présentais un autre souci qui est que le système pouvait rester assez longtemps muet si l'objet ne changeait pas. J'ai donc rajouté un petit délai avant la répétition du même objet. La répétition est donc moins excessive et permet tout de même à l'utilisateur de réentendre le nom de l'objet.\\
+
+Pour que l'utilisateur puisse avoir un peu de contrôle sur le synthétiseur vocal, j'ai également rajouté la possibilité de le mettre en muet. Pour cela, un simple tap sur l'écran permettra d'activer ou de désactiver le synthétiseur vocal.\\
+
+\begin{lstlisting}[language=Java]
+trackingOverlay.setOnClickListener(new View.OnClickListener() { // TrackingOverlay est la vue affiche sur l'activite principale de l'application
+      @Override
+      public void onClick(View v) { // Lorsque l'utilisateur clique sur l'ecran
+        isMuted = !isMuted; // Variable qui sera utilise plus loin dans le code qui desactivera le synthetiseur vocal
+        tts.speak(isMuted?"muted":"unmuted", TextToSpeech.QUEUE_FLUSH, null, null); // On indique que le synthetiseur va etre desactive/active
+        Toast.makeText(
+                DetectorActivity.this,
+                isMuted?"Muted":"Unmuted",
+                Toast.LENGTH_SHORT)
+                .show(); // Court affichage visuelle
+      }
+    });
+\end{lstlisting}
+
 \section{Viseur virtuel}
 
-\section{Start and Stop}
+Un autre problème que j'ai rencontré est la multitude des résultats retournés par le détecteur. En effet, le modèle utilisé est capable de renvoyer le nom de chaque objet (qu'il connait) sur une image donnée et sa position (sur l'image). \\
+\newpage
+
+\begin{figure}[h!]
+\centering
+  \includegraphics[width=0.3\textwidth]{images/multiobj.jpg}
+  \caption{Ensemble des résultats retournés par le détecteur}
+  \label{fig:multiobj}
+\end{figure}
+
+Il existe des modèles tels que les modèles de classification d'objet qui ne renvoie que le nom d'un seul élément sur une image (voir cahier d'analyse). Ce type de modèle, bien que plus précis, nous intéresse moins puisqu'on souhaite récupérer le maximum d'information sur la scène qui entoure l'utilisateur. Le fait d'utiliser un modèle qui nous renvoie le nom de chaque objet connu sur une image est donc une solution plus adaptée pour notre besoin. Cependant, cela crée un problème lorsqu'on souhaite informer l'utilisateur de tous ces objets détectés en utilisant le synthétiseur vocal. En effet, la liste des résultats retournés par le détecteur peut facilement être affiché visuellement avec le label et la position de l'objet de manière instantanée (comme sur la figure \ref{fig:multiobj}). Mais avec le synthétiseur vocal, impossible de citer chaque objet en continue de manière fluide et en temps réel selon l'image qu'il y a sur la scène. \\
+
+Pour remédier à cela, on a réfléchi à un système de viseur virtuel. À l'image de l'oeil humain, ce viseur se chargera de se concentrer sur un point particulier de l'image (dans notre cas, le centre). Ensuite, ce sera l'objet visé par ce point centrale qui sera énoncé à l'aide du synthétiseur vocal. Comme l'oeil humain, les autres objets seront dans le champ de vision (autour du viseur), mais ne seront pas l'objet principal à citer. \\
+\newpage
+
+\begin{figure}[h!]
+\centering
+  \includegraphics[width=0.3\textwidth]{images/viseur.png}
+  \caption{Principe du viseur virtuel}
+  \label{fig:viseur}
+\end{figure}
+
+Pour les autres objets, ces informations ne sont pas perdus. On garde précieusement ces informations qu'on pourra utiliser d'une autre manière (exemple: vibrer en fonction du nombre d'objet qu'il y a dans le champ de vision, ou rester appuyé pour que le synthétiseur nous indique chaque objet autour du viseur, etc.). Cela évite simplement d'encombrer le synthétiseur et de devenir agaçant pour l'utilisateur.\\
+
+On rajoute ensuite dans le code une condition en plus avant d'énoncé un objet en vérifiant si l'objet est visé ou pas.\\
+
+\begin{lstlisting}[language=Java]
+for (Detector.Recognition r :results) {
+  // ...
+  if(r.getLocation().contains(viseurReco.getLocation())){ // Si le viseur est dans l'objet detecte
+    if(!tts.isSpeaking() && !readedText.equals(r.getTitle())){
+      tts.speak(r.getTitle(), TextToSpeech.QUEUE_FLUSH, null, null);
+      readedText = r.getTitle();
+    }
+  }
+  // ...
+}
+\end{lstlisting}
+
+\newpage
+Dans l'image ci-dessous, on a donc que le cahier qui est énoncé.\\
+
+\begin{figure}[h!]
+\centering
+  \includegraphics[width=0.3\textwidth]{images/viseurapp.jpg}
+  \caption[]{Résultat du viseur \footnotemark}
+  \label{fig:viseurapp}
+\end{figure}
+
+\footnotetext{Le viseur est affiché à titre indicatif mais son affichage n'est pas utile}
+
+\section{Réglage du seuil de détection}
+
+Pour réduire la multitude des objets détectés, j'ai ajouté la possibilité de modifier le seuil de détection minimale. En mettant un seuil plus élevé, on a moins d'objets détectés, mais ceux détectés sont donc moins sujet à l'erreur. On viendra donc placer une nouvelle condition pour trier les objets parmi ceux retournés en prenant uniquement celles qui ont un seuil au-dessus du seuil fixé :\\
+
+\begin{lstlisting}[language=Java]
+for (Detector.Recognition r :results) {
+  // ...
+  if(r.getConfidence() >= finalMinimumConfidence){
+  	if(r.getLocation().contains(viseurReco.getLocation())){ // Si le viseur est dans l'objet detecte
+	    if(!tts.isSpeaking() && !readedText.equals(r.getTitle())){
+	      tts.speak(r.getTitle(), TextToSpeech.QUEUE_FLUSH, null, null);
+	      readedText = r.getTitle();
+	    }
+    }
+  }
+  // ...
+}
+\end{lstlisting}
+
+J'ai décidé de rajouter le réglage du seuil dans le volet inférieur car l'utilisateur n'aura probablement pas besoin de modifier ce paramètre. Le seuil par défaut est à 60\%.\\
+
+\begin{figure}[h!]
+\centering
+  \includegraphics[width=0.3\textwidth]{images/seuil.JPG}
+  \caption{Réglage du seuil de détection}
+  \label{fig:seuil}
+\end{figure}
+
+En outre, si l'utilisateur souhaite modifier ce paramètre, il faudra ouvrir le volet en le glissant puis naviguer sur chaque élément avec le synthétiseur vocal par défaut de son smartphone (le mode voice assistant) \footnote{Remarque : L'activation du mode Voice Assistant n'interfère pas avec la synthèse vocal implémenté au sein de l'application. Il est donc possible d'utiliser ce mode par-dessus d'autres applications utilisant la synthèse vocal.}.
 
 \section{Capteurs}
 
+Toujours dans l'optique de découvrir les possibilités que peuvent nous apporter un smartphone, nous avons voulu tester l'utilisation de différents capteurs présents dans le téléphone. J'ai donc mis en place trois capteurs : \\
+
+\begin{itemize}
+  \item Le GPS
+  \item Le gyroscope
+  \item Le capteur de roation geomagnetique
+  \item Le capteur de proximité \\
+\end{itemize}
+
+Sur Android pour utiliser ces capteurs, il suffit d'avoir un \verb|SensorManager| et une instance de chaque capteurs avec la classe \verb|Sensor|. Une fois les demandes de permissions ajouté si nécessaire dans le fichier Android Manifest, il suffit d'enregistrer chaque capteur avec un listener pour motirer leurs changement : \verb|registerListener(SensorEventListener listener, Sensor sensor,int samplingPeriodUs)|. À chaque changement, je vérifie ensuite le type du capteur et affiche la valeur renvoyé : \\
+
+\begin{lstlisting}[language=Java]
+public void onSensorChanged(SensorEvent event) {
+    if(event.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR){
+      gyroscopeTV.setText("gyroscope: x="+event.values[0]+" y="+event.values[1]+" z="+event.values[2]);
+      gyroscopeTV.setTextColor(Color.WHITE);
+    }
+    if(event.sensor.getType() == Sensor.TYPE_PROXIMITY){
+      proximityTV.setText("proximite: "+event.values[0]+" cm");
+      proximityTV.setTextColor(Color.WHITE);
+    }
+    if (event.sensor.getType() == Sensor.TYPE_GEOMAGNETIC_ROTATION_VECTOR){
+      geomagneticTV.setText("geomagnetique: x="+event.values[0]+" y="+event.values[1]+" z="+event.values[2]);
+      geomagneticTV.setTextColor(Color.WHITE);
+    }
+  }
+\end{lstlisting}
+
+En utilisant le GPS, on peut reproduire les fonctionnalités que proposent les cannes connectées aujourd'hui comme la géolocalisation de l'utilisateur. Cette géolocalisation peut être utilisée pour informer les proches du lieu où se trouve l'utilisateur en cas de danger, mais il peut aussi servir à enregistrer des informations sur un lieu spécifique. En effet, à l'aide des autres capteurs, il pourra être envisagé la création d'une cartographie en se basant sur le lieu et l'orientation en fonction des pôles (Nord, Sud, Est, Ouest). Ainsi, l'ensemble des objets détectés sur une image pourra être enregistré et attribuer à un emplacement spécifique dans l'espace. Cela permettra de guider par exemple l'utilisateur sur un lieu où il a l'habitude de se rendre régulièrement.
+
 \section{Documentations}
+
+\begin{figure}[h!]
+\centering
+  \includegraphics[width=\textwidth]{images/docs.JPG}
+  \caption{Documentations}
+  \label{fig:docs}
+\end{figure}
+
+Ce rapport n'étant qu'une synthèse du travail réalisé, il est accompagné de divers document permettant d'avoir plus de détails sur différents points du projet. Pour que mon travail puisse être repris facilement, j'ai pris soin de fournir un maximum d'informations pour répondre aux éventuelles interrogations. Ces ressources permettront donc à d'autres étudiants d'utiliser le travail réalisé afin de travailler sur la canne connectée.
 
 \chapter{Prise de recul}
 
