@@ -341,17 +341,62 @@ En utilisant le GPS, on peut reproduire les fonctionnalités que proposent les c
 
 Ce rapport n'étant qu'une synthèse du travail réalisé, il est accompagné de divers document permettant d'avoir plus de détails sur différents points du projet. Pour que mon travail puisse être repris facilement, j'ai pris soin de fournir un maximum d'informations pour répondre aux éventuelles interrogations. Ces ressources permettront donc à d'autres étudiants d'utiliser le travail réalisé afin de travailler sur la canne connectée.
 
+\section{Résultat final}
+
+Ce projet a permis d'aboutir sur une application Android stable renvoyant des données utiles au sein d'un environnement donnée. L'application est capable de renvoyer sous forme audio les objets détectés afin que cela puisse être utilisé par les personnes malvoyantes. 
+
+\begin{figure}[h!]
+\centering
+  \includegraphics[width=0.3\textwidth]{images/result.jpg}
+  \caption{Résultat final}
+  \label{fig:result}
+\end{figure}
+
+Les données renvoyées par les capteurs (localisation, orientation, etc.) restent cependant à utiliser à travers des fonctionnalités qui pourront être utiles aux aveugles. Le projet peut donc être présenté à des aveugles afin d'avoir un premier retour sur les fonctionnalités qu'ils souhaiteraient retrouver au sein de ce type d'application.
+
 \chapter{Prise de recul}
 
 \section{Points positifs}
 
+Du point de vue de l'application, je suis assez satisfait de ce qui a été réalisé. En effet, l'application répond au besoin initial qui a été défini en début de projet. Les fonctionnalités de base ont été implémentés tel que la détection d'objet et le retour vocal. Egalement, j'ai réussi à explorer certaines possibilités que peuvent apporter le smartphone notamment en utilisant les différents capteurs qui y sont intégrés. J'ai également pu souligner une limite sur la partie détection d'objet qui est l'emboitement des objets détectés. Avec cette limite, on prend donc conscience que l'intelligence artificielle atteint aujourd'hui des résultats très satisfaisant mais présente encore quelques problèmes lorsqu'on souhaite le mettre à profit sur des cas concrèt.\\
+
+D'un point de vue gestion de projet, j'ai su allier travail et communication réguliere avec le client. Le travail réalisé a pu suivre un planning bien établi à l'avance afin d'anticiper les délais et jalons prévu par Polytech. Les communications régulieres avec le client ont permis de faire un point sur l'avancé du projet de manière hebdomadaire. galement l'effort dans la mise en place d'un Git ainsi que la rédaction des divers documents pourra permettre une réutilisabilité de mon travail.\\
+
+Dans l'ensemble, j'ai apprécié travaillé sur ce projet avec M.VENTURINI qui a su me guider tout au long de ce projet. J'ai pu mettre en pratique mes connaissances et en apprendre davantage concernant l'intelligence artificielle.
+
 \section{Points critiques}
+
+Malgré les résultats obtenus, l'application est exploitable, mais plusieurs fonctionnalités peuvent encore être implémentés. En effet, toutes les possibilités du smartphone n'ont pas pu être mis en oeuvre faute de temps. On aurait pu en effet, comme l'a suggéré M.VENTURINI, implémenté en plus de la détection d'objet, un système de navigation se basant sur une cartographie alimentée par les objets détectés sur un lieu donné. Ainsi on met en oeuvre la géolocalisation, l'orientation du smartphone, et bien d'autres capteurs qui sont présents sur le smartphone. Le PFE ne durant qu'à peine cinq mois, et tenant compte des obligations scolaires en parallèle, ce point a été une des plus critiques.\\
+
+En terme de gestion de projet, le projet ne m'a pas permis de faire une gestion budgétaire par exemple puisque je n'ai eu aucune commande de matériel à faire à la comptabilité de l'école. L'école disposant déjà de smartphone dédié pour les TPs. Le projet ne nécessite que ce matériel pour pouvoir être réalisé. Cela aurait pu être intéressant de pouvoir anticiper les coûts de différents matériels par exemple et de gérer le montant d'une commande afin que cela ne dépasse pas le budget du projet. Puiqu'un projet tourne autour des trois points : coût, délai et qualité, je n'ai pas eu l'occasion de gérer la partie coût. Pour estimer le coût du projet, j'ai utilisé un Samsung Galaxy S10e 128Go de l'école qui coûte 449€. À cela s'ajoute le temps de travail d'un apprenti ingénieur.
 
 \section{Difficultés}
 
+L'une des difficultés que j'ai rencontré lors de ce projet fut la montée en compétence dans le domaine de l'intelligence artificielle. En effet, durant toute ma scolarité je n'ai pas eu l'occasion de suivre des cours sur ce thème afin d'avoir quelques bases sur son fonctionnement. J'ai donc du chercher à comprendre rapidement les éléments dont j'aurai besoin pour ce projet sans forcément m'attarder sur le fonctionnement interne des réseaux de neurones. En effet, durant mes recherches afin de gagner du temps, je ne me suis pas plongé sur le fonctionnement en détail d'un réseau de neurone ainsi que des procédés mathématiques qui y sont employées. C'est le point que je trouve dommage puisque cela m'aurait permis d'en apprendre beaucoup mais dans le cadre de ce projet je n'ai pas eu besoin d'aller aussi loin. Il a donc fallu trier les informations et prendre que ce qui m'est utile pour la réalisation du projet. Mais dans l'ensemble j'ai quand même appris les grandes lignes et ça m'a permis de réaliser l'application.\\
+
+Un autre point où j'ai eu assez de difficultés fut dans la rédaction des différents documents demandés. J'ai du accorder autant de temps à la rédaction de ce document qu'au développement de l'application. Le projet cette année étant axé sur ce point entre autre, je trouve que cela a quand même impacté grandement le travail réalisé concrètement au niveau de l'application.
+
 \section{Améliorations possibles}
 
+Parmi les améliorations que je pourrai faire ce serait dans la gestion du temps de travail accordé au projet. J'ai remarqué que travailler une ou deux heures par jour dans la semaine entre les cours était moins efficace que de bloquer toute une journée ou demi-journée sur le projet. En effet, j'ai trouvé qu'en une heure ou deux seulement, il m'est difficile d'être assez concentré et plongé dans le travail afin d'avancer considérablement.\\
+
+Il y a plusieurs améliorations qui peuvent-être faites sur l'application. Parmi celles-ci :\\
+
+\begin{itemize}
+  \item Utiliser les données renvoyées par les capteurs pour d'autres fonctionnalités en plus (ex: situer le smartphone, détection de chutes, etc.)
+  \item Sauvegarder les objets dans le champ de vision (objets non visés) dans une base de données pour constituer une cartographie des objets sur un lieu (ex: pièce de maison)
+  \item Ajouter des fonctions de paramétrage avec des gestes sur l'écran (ex: régler le volume en glissant vers le haut/bas)\\
+\end{itemize}
+
+Ces suggestions d'améliorations sont bien sûr discutables en fonction de leurs utilités.
+
 \chapter{Conclusion}
+
+À travers ce projet, j'ai pu mettre en pratique mes connaissances et compétences apprises à Polytech Tours tout en apprenant de nouvelles. J'ai pu mettre en place une démarche ingénieur tout le long du projet à travers l'étude des besoins, la gestion du projet, la réalisation ainsi que la documentation. \\
+
+Je suis content d'avoir pu livrer une version fonctionnelle et stable de l'application. Le respect des bonnes pratiques de programmation m'a permis d'avoir une application fluide et ainsi éviter d'avoir une application qui rame voir qui crash. Avec ce projet, j'espère avoir contribué à un travail qui sera utile aux personnes malvoyantes ou aveugles.\\
+
+Ce fut un plaisir de travailler sur ce projet et d'apprendre beaucoup de notion sur l'intelligence artificielle. J'espère que j'aurai à nouveau une occasion pareille durant ma carrière pour renforcer et mettre en pratique ces connaissances.
 
 \annexes
 
