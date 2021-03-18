@@ -30,7 +30,7 @@ C'est un manuel administrateur qui vise toute personne souhaitant obtenir plus d
 \chapter{Déploiement}
 Dans ce chapitre nous verrons comment obtenir l'application et comment le déployer afin qu'il soit accessible aux utilisateurs finaux.
 
-\section{Génération de l'APK}
+\section{Génération de l'APK}\label{genapk}
 
 Il faut tout d'abord récupérer le code source du projet disponible sur le github \footnote{\url{https://github.com/Djawad-mdallahmari/PFE-ObjectDetection}}. Une fois le code cloner, il faut l'ouvrir avec Android Studio (voir installation Android Studio \footnote{\url{https://developer.android.com/studio/install}}). Après avoir vérifié que le code compile bien (se référrer au manuel mainteneur), il faut générer le .apk (Android Package). C'est le format de fichier de package utilisé par Android. C'est ce qui va permettre d'archiver le programme avec tous ces ressources dans un seul fichier qui pourra être déployer facilement par la suite.\\
 Pour générer un APK de manière rapide (pour des tests par exemple) il suffit de cliquer sur \verb|Build >  Build Bundle(s) / APK(s) > Build APK(s)|. Un fichier avec l'extension .apk sera générer dans le dossier \verb|PFE-ObjectDetection\app\build\outputs\apk\interpreter\debug| et pourra donc être utiliser directement. Cependant, pour déployer l'application sur le Play Store par exemple il est préférable de générer l'APK autrement car l'application sera plus adapté et aura une taille moins importante. Pour cela, il faut cliquer sur \verb|Build > Generate Signed Bundle or APK| et suivre les instructions jusqu'à la génération de l'APK.
@@ -69,15 +69,29 @@ La dernière étape du déploiement est la vérification de la disponibilité de
 
 \chapter{Installation}
 \section{Installation depuis Google Play}
-télécharger
-\section{Installation depuis l'APK}
-.apk, source inconnu
+Pour installer l'application depuis le Goole Play, il suffit d'ouvrir l'application sur le smartphone sur lequel on souhaite installer l'application, puis rechercher le nom de l'application. 
+Une fois trouvé, il faut cliquer sur "installer" et l'application sera installé sur le smartphone. \\
+Une autre façon de faire serait d'utiliser directement Google Play avec le navigateur puis de sélectionner sur quel terminal on souhaite l'installer. Cette deuxième manière de faire sera plus pratique 
+dans le cadre d'une installation sur une multitude d'appareil. \\
+IMAGE HERE
+\section{Installation à partir du fichier APK}
+Pour installer l'application sans passer par le Google Play, il suffit de disposer le fichier .apk (voir  \nameref{genapk}). Télécharger l'application sur le smartphone et avant de cliquer dessus pour l'installer, 
+il faut autoriser l'installation d'application à partir de source inconnue. Cette option se trouve dans la partie « Sécurité » des paramètres du smartphone. Une fois cela fait, à l'aide d'un explorateur de fichier, naviguer jusqu'à l'emplacement du fichier .apk puis cliquer dessus pour l'installer.
+
 \section{Installation depuis Android Studio}
-fleche verte
+Une dernière façon d'installer l'application est d'utiliser l'environnement de développement Android Studio. Pour cela, assurer vous d'avoir le code source et de vérifier que celui-ci compile bien (se référrer au manuel mainteneur). Ensuite il faut connecter le smartphone à l'ordinateur et activer le déboggage usb dans les paramètres. Cette option est, comme son nom l’indique, pour les développeurs afin de déboguer une application. Il n'est donc pas recommander d'utiliser ce méthode dans le cadre d'un déploiement en production. Cette option se trouve dans la partie "Option de développement" dans les paramètres du smartphone. Ensuite sur Android Studio il suffit de lancer l'application en sélectionnant le smartphone en tant que source et non l'émulateur de terminal Android.
+IMAGE HERE
+
 \chapter{Configuration}
 \section{vérification des configurations}
-par défaut pas mute, seuil de détection, 
+L'application n'a pas besoin d'être configuré pour être utiliser. Une fois installé sur le terminal, l'utilisateur peut directement s'en servir. En cas d'anomalies, vérifier :
+\begin{itemize}
+  \item La possibilité d'utiliser la caméra arrière du smartphone.
+  \item La possibilité d'utiliser le haut-parleur du smartphone.
+  \item Le mode du synthétiseur vocal (mode mute ou unmute)
+  \item Le niveau du seuil de détection minimal
+\end{itemize}
 
-\annexes
+Ces éléments sont en effet indispensables pour que l'application puisse fonctionner correctement. Si l'anomalie persiste se rapprocher d'un développeur afin d'entamer une procédure de recherche plus approfondie.
 
 \end{document}
