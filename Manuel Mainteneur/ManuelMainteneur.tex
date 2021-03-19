@@ -23,5 +23,22 @@
 
 \chapter{Introduction}
 
+Ce document fait partie d'un ensemble de livrables qui accompagne le projet de fin d'études "Canne connectée pour aveugles" réalisé en 2020-2021 à Polytech Tours par Djawad M'DALLAH-MARI.\\
+
+C'est un manuel mainteneur qui vise toute personne souhaitant obtenir plus d'information sur la maintenance du système. Que ce soit pour une maintenance préventive, évolutive ou corrective.
+
+\chapter{Maintenance préventive, évolutive et corrective}
+\section{Garantir une continuité de fonctionnement}
+Pour garantir le bon fonctionnement de l'application, il faut veiller à le mettre à jour en fonction des nouvelles versions (mineures ou majeures) de système d'exploitation. Chaque année, une nouvelle version majeure d'Android sort. Ces nouvelles versions peuvent affecter le fonctionnement de l'application. Il faut donc tester l'application sur la nouvelle version et faire les éventuelles mises à jour. Ceci permettra de garantir aux utilisateurs qui ont mis à jour leurs smartphones de continuer d'utiliser l'application.\\
+
+Les nouvelles versions d'Android peuvent être retrouvées sur  \verb|\url{https://developer.android.com/}| dans la section "All Android releases". Le détail des changements est sur la section "Releases notes". Il faut regarder les dépendances et librairies qui ont été mis à jour et tester les impacts que celles-ci génère sur l'application.
+
+\section{Correction d'anomalies}
+Les dysfonctionnements techniques de l'application peuvent être détectés après son déploiement. Dans ce cas, il faut tenir compte des retours des utilisateurs et investiguer sur les bugs remontés. Ces bugs peuvent être liés aux mises à jours mineures du système d'exploitation qui n'ont pas été étudiées. Ils peuvent aussi être dû au matériel utilisé. En effet, ne maîtrisant pas le périphérique du client, celui-ci peut utiliser une ancienne version d'Android causant des dysfonctionnement. Pour cela il faut veiller à ce que l'application soit compatible avec les anciennes versions ou le rendre impossible à installer sur ces anciennes versions.
+
+\section{Anticiper les délais de déploiement}
+Étant donné que le déploiement se fait sur le Google Play, la disponibilité d'une nouvelle version est conditionné par le délai effectué par Google pour vérifier les applications déployée sur le store. Il faut donc prendre en compte ce paramètre afin de fournir une version stable le plus rapidement possible aux utilisateurs. Lors d'un bug important qui nécessite un certain temps de correction, il faut redéployer une ancienne version stable de l'application en attendant la correction du bug.\\
+
+Pour que l'application soit pérenne, il faut donc continuellement faire une veille technologique sur les nouvelles mises à jour, mais aussi être à l'écoute des utilisateurs pour prendre en compte leurs retours.
 
 \end{document}

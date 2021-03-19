@@ -30,7 +30,7 @@ Ce document va servir à l'administrateur qui souhaite obtenir des informations 
 
 ### Manuel mainteneur
 
-Le manuel mainteneur fournit des informations sur la maintenance du système à savoir la vérification du bon fonctionnement du système, les tests sur les nouvelles versions à déployer ainsi que les modalités de compilation. 
+Le manuel mainteneur fournit des informations sur la maintenance du système à savoir la vérification du bon fonctionnement du système et les tests sur les nouvelles versions à déployer. 
 
 ### Manuel développeur
 

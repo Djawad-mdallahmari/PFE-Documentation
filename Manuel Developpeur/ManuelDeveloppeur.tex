@@ -23,12 +23,139 @@
 
 \chapter{Introduction}
 
-Tell something here ...
+Ce document fait partie d'un ensemble de livrables qui accompagne le projet de fin d'études "Canne connectée pour aveugles" réalisé en 2020-2021 à Polytech Tours par Djawad M'DALLAH-MARI.\\
 
-\chapter{Premier chapitre}
+C'est un manuel développeur qui vise toute personne souhaitant obtenir plus d'information sur la partie technique du système. Il détaille de manière précise chaque élément permettant de réaliser une tâche particulière dans le système.
 
-\chapter{Conclusion}
+Des notions en développement d'application sont requises afin de mieux comprendre les éléments abordés dans ce document.
 
-\annexes
+\chapter{Installation des prérequis}
+Avant de pouvoir développer une application Android, il faut avoir installé au préalable quelques éléments.
 
+\section{Java Development Kit}
+Le Java Development Kit (JDK) permettra de compiler et déboguer le code. Il permettra également de l'exécuter grâce au JRE (Java Runtime Environment).\\
+
+Pour l'installer il faut aller sur \verb|\url{https://www.oracle.com/java/technologies/javase-downloads.html}| et télécharger une version au-dessus de Java 8. Une fois téléchargé il suffit de suivre les instructions jusqu'à la fin de l'installation.
+
+\section{Android Studio et le SDK Android}
+Android Studio sera l'environnement de développement à utiliser pour les développements et le SDK Android permettra d'obtenir l'ensemble d'outils nécessaires pour le développement d'applications Android. Pour installer ces outils, télécharger l'installateur sur \verb|\url{https://developer.android.com/studio}|. Une fois téléchargé il suffit de suivre les instructions jusqu'à la fin de l'installation en veillant à cocher l'installation du SDK Android.
+
+\section{Code source}
+Le code source du projet est disponible sur \verb|\url{https://github.com/Djawad-mdallahmari/PFE-ObjectDetection}|. Il suffit de le cloner ou télécharger le zip contenant tout le code. Ensuite, il suffit de l'importer sur Android Studio et lancer la compilation.
+
+\chapter{Fontionnalité implémentées}
+Dans cette partie, nous verrons comment sont implémentés les différentes fonctionnalité ajoutées à l'application.
+
+\section{Intégration du modèle}
+
+Le modèle, au format TensorFlow Lite (.tflite) est embarqué localement au sein de l'application. Ainsi, cela évite d'utiliser un modèle distant et donc d'être dans l'obligation d'avoir une connexion internet. Le modèle ainsi que son fichier label sont dans le répertoire \verb|PFE-ObjectDetection/app/src/main/assets/|.\\
+
+La création du détecteur se fait dans la classe \verb|DetectorActivity| grâce à la méthode \verb|TFLiteObjectDetectionAPIModel.create(this,TF_OD_API_MODEL_FILE,TF_OD_API_LABELS_FILE,TF_OD_API_INPUT_SIZE,TF_OD_API_IS_QUANTIZED)|. Cette méthode de l'API TensorFlow Lite permet de créer un détecteur en prenant en paramètre, le contexte, le modèle, le fichier de label, ainsi que les paramètres spécifiant le modèle à savoir la taille des inputs et si le modèle est quantifié ou pas. \\
+
+Pour utiliser ensuite le modèle, il suffit d'appeler la méthode \verb|detector.recognizeImage(croppedBitmap)| en lui passant l'image à analyser. Cette méthode est appelée pour chaque image du flux vidéo (grâce au listener qui déclenche la méthode \verb|processImage()|). Cette méthode retourne une liste de résultats (\verb|List<Detector.Recognition>|) qui va être traité avant que le résultat soit affiché/ennoncé à l'utilisateur.
+
+\section{Synthétiseur vocal}
+
+Le synthétiseur vocal utilise la classe \verb|TextToSpeech|. L'objet est instancié lors de l'appellation de la méthode \verb|onPreviewSizeChosen| (dans DetectorActivity) qui est appelé au début du programme. Lors de la création de l'objet on override la méthode \verb|onInit| afin d'initialiser la langue du synthétiseur en anglais. En effet, le label des objets étant en anglais, il faut bien initialiser le synthétiseur, car la langue par défaut sera la langue du téléphone.\\
+
+La lecture des objets identifiés est faite en appelant la méthode \verb|speak()|. Dans notre cas, l'objet est cité qu'après avoir rempli les conditions suivantes :\\
+
+\begin{itemize}
+	\item Il faut que l'objet soit visé -> \verb|r.getLocation().contains(viseurReco.getLocation())|
+	\item Il ne faut pas que le synthétiseur soit en train de cité un objet ->  \verb|!tts.isSpeaking()|
+	\item Il ne faut pas que le synthétiseur soit désactiver (mute) -> \verb|!isMuted|
+	\item Si l'objet est le même que précédemment, on ne le cite qu'après un petit délai -> \verb|readedText.equals(r.getTitle())| \\
+  \end{itemize}
+
+\begin{lstlisting}[language=Java]
+	if(r.getLocation().contains(viseurReco.getLocation())){ //Si le viseur est dans l'objet détecté && pas le même
+		if (readedText.equals(r.getTitle())){ // Si c'est le même
+			if(!tts.isSpeaking() && !isMuted){
+				vibrator.vibrate(200); // Vibre
+				tts.playSilentUtterance(3000,TextToSpeech.QUEUE_FLUSH,null);
+				readedText = "";
+			}
+		}else{
+			if(!tts.isSpeaking() && !isMuted){
+				tts.speak(r.getTitle(), TextToSpeech.QUEUE_FLUSH, null, null); // Synthetiseur prononce le label de l'objet
+				//vibrator.vibrate(200); // Vibre
+				readedText = r.getTitle();
+			}
+		}
+	}
+\end{lstlisting}
+
+\section{Seuil de détection}
+
+Le réglage du seuil de détection se fait dans le volet déroulant. Les éléments graphiques ont donc été ajoutés au layout \verb|tfe_od_layout_bottom_sheet.xml| dans lequel on ajoute deux boutons (plus et moins) ainsi qu'un affichage de la valeur, le tout encapsulé au sein de Layout (RelativeLayout et LinearLayout) afin d'être affiché correctement sur une ligne. Ces éléments sont ensuite récupérés dans la méthode \verb|onCreate()| de l'activité \verb|CameraActivity|. On définit l'activité même en tant que Listener des ces éléments en implémentant la classe \verb|View.OnClickListener|. Ensuite dans la méthode \verb|onClick|, appelée comme son nom l'indique lors d'un click sur les éléments, on vérifie l'élément graphique qui a été cliqué puis on fait le traitement.
+
+\begin{lstlisting}[language=Java]
+	else if (v.getId() == R.id.plusSeuil) {
+      String seuil = seuilTextView.getText().toString().trim();
+      int numSeuil = Integer.parseInt(seuil);
+      if (numSeuil >= 98) return;
+      numSeuil+=2;
+      System.out.println("numSeuil: "+numSeuil);
+      seuilTextView.setText(String.valueOf(numSeuil));
+      setNumSeuil(numSeuil);
+    } else if (v.getId() == R.id.minusSeuil) {
+      String seuil = seuilTextView.getText().toString().trim();
+      int numSeuil = Integer.parseInt(seuil);
+      if (numSeuil <= 2) {
+        return;
+      }
+      numSeuil-=2;
+      seuilTextView.setText(String.valueOf(numSeuil));
+      setNumSeuil(numSeuil);
+    }
+\end{lstlisting}
+
+Ici, on vérifie quel bouton a été appuyé puis on incrémente ou décrémente par pas de 2 le seuil de détection. Le seuil est ensuite mis à jour en appelant la méthode abstraite \verb|setNumSeuil()| implémentée dans la classe \verb|DetectorActivity|. La seule ligne intéressante de cette méthode est celle où on met à jour la variable globale du seuil de détection par la valeur reçu en paramètre \verb|MINIMUM_CONFIDENCE_TF_OD_API = numSeuil/100f|. Ainsi, lors du prochain traitement, ce sera le nouveau seuil qui sera pris en compte.
+
+\section{Viseur virtuel}
+
+Pour la réalisation du viseur centrale, nous utilisons la classe \verb|RectF| pour dessiner un rectangle qui représentera le viseur. Le rectangle est instancié avec son constructeur en indiquant les différentes coordonnées. Une fois initialisé, il suffit de rajouter une vérification en plus dans la liste des résultats retournés par le détecteur pour ne traiter l'objet que si il a été visé \verb| if(r.getLocation().contains(viseurReco.getLocation()))|. 
+
+\section{Capteurs}
+
+Pour utiliser un capteur, il faut utiliser la classe \verb|Sensor|. Ensuite, à l'aide d'un \verb|SensorManager| on choisi le type de capteur souhaité \verb|sensorManager.getDefaultSensor(Sensor.TYPE_GEOMAGNETIC_ROTATION_VECTOR)|. Ensuite il faut enregistrer le listener pour du capteur souhaité qui sera donc en charge de détecter les changements \verb|sensorManager.registerListener(this,sensorGeomagnetic,10000)|. Ici le listener sera l'activité \verb|CameraActivity| elle même donc elle devra implémenté la classe \verb|SensorEventListener|.\\
+
+Les changements seront ensuite détectés par la méthode \verb|onSensorChanged| qu'il faut donc réimplémentée.\\
+
+\begin{lstlisting}[language=Java]
+  @Override
+  public void onSensorChanged(SensorEvent event) {
+    if(event.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR){
+      gyroscopeTV.setText("gyroscope: x="+event.values[0]+" y="+event.values[1]+" z="+event.values[2]);
+      gyroscopeTV.setTextColor(Color.WHITE);
+    }
+    if(event.sensor.getType() == Sensor.TYPE_PROXIMITY){
+      proximityTV.setText("proximité: "+event.values[0]+" cm");
+      proximityTV.setTextColor(Color.WHITE);
+    }
+    if (event.sensor.getType() == Sensor.TYPE_GEOMAGNETIC_ROTATION_VECTOR){
+      geomagneticTV.setText("geomagnetique: x="+event.values[0]+" y="+event.values[1]+" z="+event.values[2]);
+      geomagneticTV.setTextColor(Color.WHITE);
+    }
+  }
+\end{lstlisting}
+
+Ici ,on vérifie d'abord le type de capteur pour savoir lequel a changé, ensuite, on met à jour les valeurs. Les valeurs sont, à ce jour, affichées directement à l'écran, mais pourrait être traité directement pour implémenter une fonctionnalité utilisant ces capteurs. \\
+
+Le capteur de localisation est quant à lui est implémenté différement. Il faut utiliser la classe \verb|LocationManager| et demander les permissions avant de pouvoir continuer. Ceci est fait grâce à la méthode \verb|requestPermissionLocation()| qui est appelée que si on n'a pas encore les permissions.
+
+\begin{lstlisting}[language=Java]
+if(hasPermissionLocation()){
+      locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+      locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+      locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+    }else{
+      LOGGER.i("Request permission");
+      requestPermissionLocation();
+    }
+\end{lstlisting}
+
+Ici, on utilise deux capteurs, bien qu'un seul suffit pour avoir la géolocalisation. Le premier se basant sur les coordonnées GPS tandis que l'autre se basant sur le réseau où l'utilisateur est connecté. Il faut ensuite implémenter le listener \verb|LocationListener| afin d'être notifié des changements de position géographique.\\
+
+Les deux activités majeures de l'application sont \verb|CameraActivity| et \verb|DetectorActivity|. Il est donc indispensable de comprendre ces deux activités afin de développer de nouvelles fonctionnalité.
 \end{document}
