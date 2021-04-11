@@ -25,9 +25,9 @@
 
 Ce document fait partie d'un ensemble de livrables qui accompagne le projet de fin d'études "Canne connectée pour aveugles" réalisé en 2020-2021 à Polytech Tours par Djawad M'DALLAH-MARI.\\
 
-C'est un manuel développeur qui vise toute personne souhaitant obtenir plus d'information sur la partie technique du système. Il détaille de manière précise chaque élément permettant de réaliser une tâche particulière dans le système.
+C'est le manuel développeur qui vise toute personne souhaitant obtenir plus d'information sur la partie technique du système. Il détaille de manière précise chaque élément permettant de réaliser une tâche particulière dans le système.\\
 
-Des notions en développement d'application sont requises afin de mieux comprendre les éléments abordés dans ce document.
+Des notions en développement d'application, notamment en programmation événementielle,  sont requises afin de mieux comprendre les éléments abordés dans ce document.
 
 \chapter{Installation des prérequis}
 Avant de pouvoir développer une application Android, il faut avoir installé au préalable quelques éléments.
@@ -35,24 +35,24 @@ Avant de pouvoir développer une application Android, il faut avoir installé au
 \section{Java Development Kit}
 Le Java Development Kit (JDK) permettra de compiler et déboguer le code. Il permettra également de l'exécuter grâce au JRE (Java Runtime Environment).\\
 
-Pour l'installer il faut aller sur \verb|\url{https://www.oracle.com/java/technologies/javase-downloads.html}| et télécharger une version au-dessus de Java 8. Une fois téléchargé il suffit de suivre les instructions jusqu'à la fin de l'installation.
+Pour l'installer il faut aller sur le site d'Oracle \footnote{\url{https://www.oracle.com/java/technologies/javase-downloads.html}} et télécharger une version au-dessus de Java 8. Une fois téléchargé il suffit de suivre les instructions jusqu'à la fin de l'installation.
 
 \section{Android Studio et le SDK Android}
-Android Studio sera l'environnement de développement à utiliser pour les développements et le SDK Android permettra d'obtenir l'ensemble d'outils nécessaires pour le développement d'applications Android. Pour installer ces outils, télécharger l'installateur sur \verb|\url{https://developer.android.com/studio}|. Une fois téléchargé il suffit de suivre les instructions jusqu'à la fin de l'installation en veillant à cocher l'installation du SDK Android.
+Android Studio sera l'environnement de développement à utiliser pour les développements et le SDK Android permettra d'obtenir l'ensemble d'outils nécessaires pour le développement d'applications Android. Pour installer ces outils, télécharger l'installateur sur \url{https://developer.android.com/studio}. Une fois téléchargé il suffit de suivre les instructions jusqu'à la fin de l'installation en veillant à cocher l'installation du SDK Android.
 
 \section{Code source}
-Le code source du projet est disponible sur \verb|\url{https://github.com/Djawad-mdallahmari/PFE-ObjectDetection}|. Il suffit de le cloner ou télécharger le zip contenant tout le code. Ensuite, il suffit de l'importer sur Android Studio et lancer la compilation.
+Le code source du projet est disponible sur github \footnote{\url{https://github.com/Djawad-mdallahmari/PFE-ObjectDetection}}. Il suffit de le cloner ou télécharger le zip contenant tout le code. Ensuite, il faut \textbf{l'importer} sur Android Studio et lancer la compilation.
 
-\chapter{Fontionnalité implémentées}
+\chapter{Les fontionnalités implémentées}
 Dans cette partie, nous verrons comment sont implémentés les différentes fonctionnalité ajoutées à l'application.
 
 \section{Intégration du modèle}
 
-Le modèle, au format TensorFlow Lite (.tflite) est embarqué localement au sein de l'application. Ainsi, cela évite d'utiliser un modèle distant et donc d'être dans l'obligation d'avoir une connexion internet. Le modèle ainsi que son fichier label sont dans le répertoire \verb|PFE-ObjectDetection/app/src/main/assets/|.\\
+Le modèle, au format TensorFlow Lite (.tflite) est embarqué localement au sein de l'application. Ainsi, cela évite d'utiliser un modèle distant et donc d'être dans l'obligation d'avoir une connexion internet. Le modèle ainsi que son fichier label sont dans le répertoire\\ \verb|PFE-ObjectDetection/app/src/main/assets/|.\\
 
-La création du détecteur se fait dans la classe \verb|DetectorActivity| grâce à la méthode \verb|TFLiteObjectDetectionAPIModel.create(this,TF_OD_API_MODEL_FILE,TF_OD_API_LABELS_FILE,TF_OD_API_INPUT_SIZE,TF_OD_API_IS_QUANTIZED)|. Cette méthode de l'API TensorFlow Lite permet de créer un détecteur en prenant en paramètre, le contexte, le modèle, le fichier de label, ainsi que les paramètres spécifiant le modèle à savoir la taille des inputs et si le modèle est quantifié ou pas. \\
+La création du détecteur se fait dans la classe \verb|DetectorActivity| grâce à la méthode\\ \verb|TFLiteObjectDetectionAPIModel.create(...)|. Cette méthode de l'API TensorFlow Lite permet de créer un détecteur en prenant en paramètre, le contexte, le modèle, le fichier de label, ainsi que les paramètres spécifiant le modèle à savoir la taille des inputs et si le modèle est quantifié ou pas. \\
 
-Pour utiliser ensuite le modèle, il suffit d'appeler la méthode \verb|detector.recognizeImage(croppedBitmap)| en lui passant l'image à analyser. Cette méthode est appelée pour chaque image du flux vidéo (grâce au listener qui déclenche la méthode \verb|processImage()|). Cette méthode retourne une liste de résultats (\verb|List<Detector.Recognition>|) qui va être traité avant que le résultat soit affiché/ennoncé à l'utilisateur.
+Pour utiliser ensuite le modèle, il suffit d'appeler la méthode \verb|recognizeImage(croppedBitmap)| en lui passant l'image à analyser. Cette méthode est appelée pour chaque image du flux vidéo (grâce au listener qui déclenche la méthode \verb|processImage()|). Cette méthode retourne une liste de résultats (\verb|List<Detector.Recognition>|) qui va être traité avant que le résultat soit affiché/ennoncé à l'utilisateur.
 
 \section{Synthétiseur vocal}
 
@@ -64,12 +64,12 @@ La lecture des objets identifiés est faite en appelant la méthode \verb|speak(
 	\item Il faut que l'objet soit visé -> \verb|r.getLocation().contains(viseurReco.getLocation())|
 	\item Il ne faut pas que le synthétiseur soit en train de cité un objet ->  \verb|!tts.isSpeaking()|
 	\item Il ne faut pas que le synthétiseur soit désactiver (mute) -> \verb|!isMuted|
-	\item Si l'objet est le même que précédemment, on ne le cite qu'après un petit délai -> \verb|readedText.equals(r.getTitle())| \\
+	\item Si l'objet est le même que précédemment, on ne le cite qu'après un petit délai\\ -> \verb|readedText.equals(r.getTitle())| \\
   \end{itemize}
 
 \begin{lstlisting}[language=Java]
-	if(r.getLocation().contains(viseurReco.getLocation())){ //Si le viseur est dans l'objet détecté && pas le même
-		if (readedText.equals(r.getTitle())){ // Si c'est le même
+	if(r.getLocation().contains(viseurReco.getLocation())){ //Si le viseur est dans l'objet detecte && pas le meme
+		if (readedText.equals(r.getTitle())){ // Si c'est le meme
 			if(!tts.isSpeaking() && !isMuted){
 				vibrator.vibrate(200); // Vibre
 				tts.playSilentUtterance(3000,TextToSpeech.QUEUE_FLUSH,null);
@@ -114,11 +114,11 @@ Ici, on vérifie quel bouton a été appuyé puis on incrémente ou décrémente
 
 \section{Viseur virtuel}
 
-Pour la réalisation du viseur centrale, nous utilisons la classe \verb|RectF| pour dessiner un rectangle qui représentera le viseur. Le rectangle est instancié avec son constructeur en indiquant les différentes coordonnées. Une fois initialisé, il suffit de rajouter une vérification en plus dans la liste des résultats retournés par le détecteur pour ne traiter l'objet que si il a été visé \verb| if(r.getLocation().contains(viseurReco.getLocation()))|. 
+Pour la réalisation du viseur centrale, nous utilisons la classe \verb|RectF| pour dessiner un rectangle qui représentera le viseur. Le rectangle est instancié avec son constructeur en indiquant les différentes coordonnées. Une fois initialisé, il suffit de rajouter une vérification en plus dans la liste des résultats retournés par le détecteur pour ne traiter l'objet que si il a été visé:\\ \verb| if(r.getLocation().contains(viseurReco.getLocation()))|. 
 
 \section{Capteurs}
 
-Pour utiliser un capteur, il faut utiliser la classe \verb|Sensor|. Ensuite, à l'aide d'un \verb|SensorManager| on choisi le type de capteur souhaité \verb|sensorManager.getDefaultSensor(Sensor.TYPE_GEOMAGNETIC_ROTATION_VECTOR)|. Ensuite il faut enregistrer le listener pour du capteur souhaité qui sera donc en charge de détecter les changements \verb|sensorManager.registerListener(this,sensorGeomagnetic,10000)|. Ici le listener sera l'activité \verb|CameraActivity| elle même donc elle devra implémenté la classe \verb|SensorEventListener|.\\
+Pour utiliser un capteur, il faut utiliser la classe \verb|Sensor|. Ensuite, à l'aide d'un \verb|SensorManager| on choisi le type de capteur souhaité \verb|Sensor.TYPE_GEOMAGNETIC_ROTATION_VECTOR| par exemple. Ensuite il faut enregistrer le listener pour du capteur souhaité qui sera donc en charge de détecter les changements \verb|sensorManager.registerListener(this,sensorGeomagnetic,10000)|. Ici le listener sera l'activité \verb|CameraActivity| elle même donc elle devra implémenté la classe \verb|SensorEventListener|.\\
 
 Les changements seront ensuite détectés par la méthode \verb|onSensorChanged| qu'il faut donc réimplémentée.\\
 
@@ -130,7 +130,7 @@ Les changements seront ensuite détectés par la méthode \verb|onSensorChanged|
       gyroscopeTV.setTextColor(Color.WHITE);
     }
     if(event.sensor.getType() == Sensor.TYPE_PROXIMITY){
-      proximityTV.setText("proximité: "+event.values[0]+" cm");
+      proximityTV.setText("proximite: "+event.values[0]+" cm");
       proximityTV.setTextColor(Color.WHITE);
     }
     if (event.sensor.getType() == Sensor.TYPE_GEOMAGNETIC_ROTATION_VECTOR){
@@ -157,5 +157,8 @@ if(hasPermissionLocation()){
 
 Ici, on utilise deux capteurs, bien qu'un seul suffit pour avoir la géolocalisation. Le premier se basant sur les coordonnées GPS tandis que l'autre se basant sur le réseau où l'utilisateur est connecté. Il faut ensuite implémenter le listener \verb|LocationListener| afin d'être notifié des changements de position géographique.\\
 
-Les deux activités majeures de l'application sont \verb|CameraActivity| et \verb|DetectorActivity|. Il est donc indispensable de comprendre ces deux activités afin de développer de nouvelles fonctionnalité.
+\chapter{Documentation}
+
+Dans ce manuel, nous nous sommes contenté de commenter les parties du code qui réalise les fonctionnalités implémentées. Le reste du code sera facilement compréhensible par le développeur. Nous invitons en cas de difficulté à se référer à la documentation de TensorFlow Lite.
+
 \end{document}

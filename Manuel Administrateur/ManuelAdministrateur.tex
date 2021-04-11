@@ -25,7 +25,9 @@
 
 Ce document fait partie d'un ensemble de livrables qui accompagne le projet de fin d'études "Canne connectée pour aveugles" réalisé en 2020-2021 à Polytech Tours par Djawad M'DALLAH-MARI.\\
 
-C'est un manuel administrateur qui vise toute personne souhaitant obtenir plus d'information sur la configuration du système, son installation, son déploiement et toutes autres tâches qui incombe à l'administration du système.
+C'est le manuel administrateur qui vise toute personne souhaitant obtenir plus d'information sur la configuration du système, son installation, son déploiement et toutes autres tâches qui incombe à l'administration du système.\\
+
+À noter cependant que le système livré à ce jour ne dépend d'aucun service externe pour fonctionner. Les tâches d'administration sont donc assez limitées. Nous nous contenterons dans ce manuel de fournir l'essentiel pour le déploiement du système ainsi que de son installation. 
 
 \chapter{Déploiement}
 Dans ce chapitre, nous verrons comment obtenir l'application et comment le déployer afin qu'il soit accessible aux utilisateurs finaux.
@@ -33,11 +35,11 @@ Dans ce chapitre, nous verrons comment obtenir l'application et comment le dépl
 \section{Génération de l'APK}\label{genapk}
 
 Il faut tout d'abord récupérer le code source du projet disponible sur le github \footnote{\url{https://github.com/Djawad-mdallahmari/PFE-ObjectDetection}}. Une fois le code cloner, il faut l'ouvrir avec Android Studio (voir installation Android Studio \footnote{\url{https://developer.android.com/studio/install}}). Après avoir vérifié que le code compile bien, il faut générer le .apk (Android Package). C'est le format de fichier de package utilisé par Android. C'est ce qui va permettre d'archiver le programme avec tous ces ressources dans un seul fichier qui pourra être déployé facilement par la suite.\\
-Pour générer un APK de manière rapide (pour des tests par exemple) il suffit de cliquer sur \verb|Build >  Build Bundle(s) / APK(s) > Build APK(s)|. Un fichier avec l'extension .apk sera généré dans le dossier \verb|PFE-ObjectDetection\app\build\outputs\apk\interpreter\debug| et pourra donc être utilisé directement. Cependant, pour déployer l'application sur le Play Store par exemple il est préférable de générer l'APK autrement car l'application sera plus adaptée et aura une taille moins importante. Pour cela, il faut cliquer sur \verb|Build > Generate Signed Bundle or APK| et suivre les instructions jusqu'à la génération de l'APK.
+Pour générer un APK de manière rapide (pour des tests par exemple) il suffit de cliquer sur\\ \verb|Build >  Build Bundle(s) / APK(s) > Build APK(s)|. Un fichier avec l'extension .apk sera généré dans le dossier \verb|PFE-ObjectDetection\app\build\outputs\apk\interpreter\debug| et pourra donc être utilisé directement. Cependant, pour déployer l'application sur le Play Store par exemple il est préférable de générer l'APK autrement car l'application sera plus adaptée et aura une taille moins importante. Pour cela, il faut cliquer sur \verb|Build > Generate Signed Bundle or APK| et suivre les instructions jusqu'à la génération de l'APK.
 
 \begin{figure}[h!]
 \centering
-  \includegraphics[width=0.3\textwidth]{images/generateAPK.jpg}
+  \includegraphics[width=0.7\textwidth]{images/generateAPK.jpg}
   \caption{Génération de l'APK}
   \label{fig:genapk}
 \end{figure}
@@ -48,16 +50,17 @@ Après avoir généré l'APK, nous pouvons désormais le déployer sur le Google
 
 \begin{figure}[h!]
 \centering
-  \includegraphics[width=0.3\textwidth]{images/CreateAppConsole.JPG}
+  \includegraphics[width=1\textwidth]{images/CreateAppConsole.JPG}
   \caption{Creation de l'application sur Google Play Console}
   \label{fig:createappconsole}
 \end{figure}
 
 On attérrit sur une section avec des menus spécifique à l'application qu'on souhaite déployer. Il faut ensuite aller sur le menu Production puis déposer le fichier .apk généré précédemment.
+\newpage
 
 \begin{figure}[h!]
 \centering
-  \includegraphics[width=0.3\textwidth]{images/release.JPG}
+  \includegraphics[width=1\textwidth]{images/release.JPG}
   \caption{Dépôt de l'APK sur Google Play Console}
   \label{fig:depotapk}
 \end{figure}
@@ -69,16 +72,19 @@ La dernière étape du déploiement est la vérification de la disponibilité de
 
 \chapter{Installation}
 \section{Installation depuis Google Play}
-Pour installer l'application depuis le Goole Play, il suffit d'ouvrir l'application sur le smartphone sur lequel on souhaite installer l'application, puis rechercher le nom de l'application. 
-Une fois trouvé, il faut cliquer sur "installer" et l'application sera installée sur le smartphone. \\
+Pour installer l'application depuis le Goole Play, il suffit de l'installer comme n'importe quel autre application du Google Play. Ouvrir Google Play sur le smartphone sur lequel on souhaite installer l'application, rechercher le nom de l'application et installer l'application. \\
 Une autre façon de faire serait d'utiliser directement Google Play avec le navigateur puis de sélectionner sur quel terminal on souhaite l'installer. Cette deuxième manière de faire sera plus pratique dans le cadre d'une installation sur une multitude d'appareils. \\
-IMAGE HERE
+\begin{figure}[h!]
+\centering
+  \includegraphics[width=0.7\textwidth]{images/DeviceChoice.JPG}
+  \caption{Choix des appareils}
+  \label{fig:devicechoice}
+\end{figure}
 \section{Installation à partir du fichier APK}
-Pour installer l'application sans passer par le Google Play, il suffit de disposer le fichier .apk (voir  \nameref{genapk}). Télécharger l'application sur le smartphone et avant de cliquer dessus pour l'installer, il faut autoriser l'installation d'application à partir de source inconnue. Cette option se trouve dans la partie « Sécurité » des paramètres du smartphone. Une fois cela fait, à l'aide d'un explorateur de fichier, naviguer jusqu'à l'emplacement du fichier .apk puis cliquer dessus pour l'installer.
+Pour installer l'application sans passer par le Google Play, il suffit de disposer du fichier .apk (voir  \nameref{genapk}). Transférer l'application sur le smartphone et avant de cliquer dessus pour l'installer, il faut autoriser l'installation d'application à partir de source inconnue. Cette option se trouve dans la partie « Sécurité » des paramètres du smartphone. Une fois cela fait, à l'aide d'un explorateur de fichier, naviguer jusqu'à l'emplacement du fichier .apk puis cliquer dessus pour l'installer.
 
 \section{Installation depuis Android Studio}
 Une dernière façon d'installer l'application est d'utiliser l'environnement de développement Android Studio. Pour cela, assurer vous d'avoir le code source et de vérifier que celui-ci compile bien. Ensuite, il faut connecter le smartphone à l'ordinateur et activer le déboggage usb dans les paramètres. Cette option est, comme son nom l’indique, pour les développeurs afin de déboguer une application. Il n'est donc pas recommandé d'utiliser cette méthode dans le cadre d'un déploiement en production. Cette option se trouve dans la partie "Option de développement" dans les paramètres du smartphone. Ensuite, sur Android Studio, il suffit de lancer l'application en sélectionnant le smartphone en tant que source et non l'émulateur de terminal Android.
-IMAGE HERE
 
 \chapter{Configuration}
 \section{vérification des configurations}

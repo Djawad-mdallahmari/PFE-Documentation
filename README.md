@@ -2,7 +2,7 @@
 
 Ce dépôt héberge toute la documentation du projet de fin d'études "Canne connectée pour aveugles" réalisé en 2020-2021 à Polytech Tours par Djawad M'DALLAH-MARI.
 
-Il contient divers document visant à accompagner toute personne souhaitant s'informer du projet, mais aussi les utilisateurs, les mainteneurs, les administrateurs ainsi que les développeurs souhaitant reprendre le projet.
+Il contient divers document visant à accompagner toute personne souhaitant s'informer sur le projet, mais aussi les utilisateurs, les mainteneurs, les administrateurs ainsi que les développeurs souhaitant reprendre le projet.
 
 ## Le projet
 
